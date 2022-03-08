@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "sqlite",
+            "database": "${workspaceFolder:skapp}/database/data.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

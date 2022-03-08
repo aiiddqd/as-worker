@@ -27,12 +27,8 @@
       ]
     },
     "uuid": {
-      "type": "uid"
-    },
-    "products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product"
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }
