@@ -29,16 +29,22 @@ add_action('init', function () {
             while (true) {
 
                 try {
+                    
                     $is_active = get_transient('as-worker');
+                    
                     if (! $is_active) {
                         set_transient('as-worker', 1, 60);
                     }
+                    
                     $jobsNumber = ActionScheduler_QueueRunner::instance()->run();
+                    
                     \WP_CLI::log('Jobs: ' . $jobsNumber);
                     wc_get_logger()->info('Jobs: ' . $jobsNumber, ['context' => 'as-worker']);
+                    
                     if (empty($jobsNumber)) {
                         sleep(30);
                     }
+                    
                 } catch (\Throwable $th) {
                     wc_get_logger()->error($th->getMessage(), ['context' => 'as-worker']);
                     // var_dump($th);
