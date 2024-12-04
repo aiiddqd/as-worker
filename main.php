@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Action Scheduler as Worker
-Description: Run Action Scheduler queue as worker mode
+Description: Run Action Scheduler queue as worker mode (wp as-worker)
 Version: 0.1.241201
 Author: aiiddqd
 Author URI: https://github.com/aiiddqd/as-worker
