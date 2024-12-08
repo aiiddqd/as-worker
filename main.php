@@ -45,8 +45,8 @@ add_action('init', function () {
 
                         // if working longer than 1 hour - stop 
                         if (time() - $is_active > 60 * 60) {
-                            // delete_transient('as-worker');
-                            // return;
+                            delete_transient('as-worker');
+                            return;
                         }
                     } else {
                         set_transient('as-worker', time(), 60);
