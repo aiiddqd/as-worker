@@ -22,22 +22,31 @@ add_action('init', function () {
         \WP_CLI::add_command('as-worker', function ($argv, $assoc_args) {
             $is_active = get_transient('as-worker');
             if ($is_active) {
-                \WP_CLI::error('as-worker - already running');
+                \WP_CLI::log('as-worker - already running');
                 return false;
             }
 
+            $couters = [
+                'total' => 0,
+                'iterations' => 0
+            ];
             while (true) {
 
+                $couters['iterations']++;
                 try {
                     
                     $is_active = get_transient('as-worker');
+
+                    if(get_transient('as-worker-hard_stop')){
+                        break;
+                    };
                     
                     if ( $is_active ) {
-                        
+
                         // if working longer than 1 hour - stop 
                         if (time() - $is_active > 60 * 60) {
-                            delete_transient('as-worker');
-                            return;
+                            // delete_transient('as-worker');
+                            // return;
                         }
                     } else {
                         set_transient('as-worker', time(), 60);
@@ -45,16 +54,20 @@ add_action('init', function () {
                     
                     $jobsNumber = ActionScheduler_QueueRunner::instance()->run();
                     
-                    \WP_CLI::log('Jobs: ' . $jobsNumber);
-                    wc_get_logger()->info('Jobs: ' . $jobsNumber, ['context' => 'as-worker']);
+                    $couters['total'] += $jobsNumber;
+
+                    \WP_CLI::log('Jobs: ' . print_r($couters, true));
+                    wc_get_logger()->info('Jobs: ' . print_r($couters, true), ['context' => 'as-worker']);
                     
                     if (empty($jobsNumber)) {
-                        sleep(30);
+                        wc_get_logger()->info('Jobs - auto stop: ' . print_r($couters, true), ['context' => 'as-worker']);
+                        delete_transient('as-worker');
+                        break;
                     }
                     
                 } catch (\Throwable $th) {
-                    wc_get_logger()->error($th->getMessage(), ['context' => 'as-worker']);
-                    // var_dump($th);
+                    wc_get_logger()->error($th->getMessage() . '... ' . print_r($couters, true), ['context' => 'as-worker']);
+                    delete_transient('as-worker');
                     break;
                 }
             }
