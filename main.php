@@ -37,7 +37,7 @@ add_action('init', function () {
                     
                     $is_active = get_transient('as-worker');
 
-                    if(get_transient('as-worker-hard_stop')){
+                    if(get_transient('as-worker-hard-stop')){
                         break;
                     };
                     
