@@ -32,8 +32,15 @@ add_action('init', function () {
                     
                     $is_active = get_transient('as-worker');
                     
-                    if (! $is_active) {
-                        set_transient('as-worker', 1, 60);
+                    if ( $is_active ) {
+                        
+                        // if working longer than 1 hour - stop 
+                        if (time() - $is_active > 60 * 60) {
+                            delete_transient('as-worker');
+                            return;
+                        }
+                    } else {
+                        set_transient('as-worker', time(), 60);
                     }
                     
                     $jobsNumber = ActionScheduler_QueueRunner::instance()->run();
