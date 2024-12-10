@@ -52,7 +52,7 @@ add_action('init', function () {
                         set_transient('as-worker', time(), 60);
                     }
                     
-                    $jobsNumber = ActionScheduler_QueueRunner::instance()->run();
+                    $jobsNumber = ActionScheduler_QueueRunner::instance()->run('WP CLI AS Worker');
                     
                     $couters['total'] += $jobsNumber;
 
