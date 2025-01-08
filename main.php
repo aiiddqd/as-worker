@@ -2,7 +2,7 @@
 /*
 Plugin Name: Action Scheduler as Worker
 Description: Run Action Scheduler queue as worker mode (wp as-worker)
-Version: 0.1.241201
+Version: 0.9.250108
 Author: aiiddqd
 Author URI: https://github.com/aiiddqd/as-worker
 */
@@ -62,7 +62,7 @@ add_action('init', function () {
                     }
                     
                     $jobsNumber = ActionScheduler_QueueRunner::instance()->run('WP CLI AS Worker');
-                    
+                    do_action('as_worker_iteration');
                     $couters['rows'] = $jobsNumber;
                     $couters['total'] += $jobsNumber;
 
@@ -79,6 +79,7 @@ add_action('init', function () {
                 } catch (\Throwable $th) {
                     wc_get_logger()->error($th->getMessage() . '... ' . print_r($couters, true), ['context' => 'as-worker']);
                     delete_transient('as-worker');
+                    do_action('as_worker_iteration_error', $th);
                     break;
                 }
             }
