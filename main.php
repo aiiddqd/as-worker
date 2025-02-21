@@ -68,14 +68,14 @@ add_action('init', function () {
 
                     \WP_CLI::log('Jobs: ' . print_r($couters, true));
                     wc_get_logger()->info('Jobs', [
-                        'source' => 'as_worker',
+                        'source' => 'as-worker',
                         'couters' => $couters,
                     ]);
                     
                     if (empty($jobsNumber)) {
                         \WP_CLI::log('Jobs - auto stop if empty');
                         wc_get_logger()->info('Jobs - auto stop', [
-                            'source' => 'as_worker',
+                            'source' => 'as-worker',
                             'couters' => $couters,
                         ]);
                         delete_transient('as-worker');
