@@ -77,7 +77,7 @@ add_action('init', function () {
                         delete_transient('as-worker');
                         break;
                     } else {
-                        wc_get_logger()->info('Jobs', [
+                        wc_get_logger()->info('Jobs - doing iteration', [
                             'source' => 'as-worker',
                             'couters' => $couters,
                         ]);
