@@ -67,17 +67,23 @@ add_action('init', function () {
                     $couters['total'] += $jobsNumber;
 
                     \WP_CLI::log('Jobs: ' . print_r($couters, true));
-                    wc_get_logger()->info('Jobs: ' . print_r($couters, true), ['context' => 'as-worker']);
+                    wc_get_logger()->info('Jobs', [
+                        'source' => 'as_worker',
+                        'couters' => $couters,
+                    ]);
                     
                     if (empty($jobsNumber)) {
                         \WP_CLI::log('Jobs - auto stop if empty');
-                        wc_get_logger()->info('Jobs - auto stop: ' . print_r($couters, true), ['context' => 'as-worker']);
+                        wc_get_logger()->info('Jobs - auto stop', [
+                            'source' => 'as_worker',
+                            'couters' => $couters,
+                        ]);
                         delete_transient('as-worker');
                         break;
                     }
                     
                 } catch (\Throwable $th) {
-                    wc_get_logger()->error($th->getMessage() . '... ' . print_r($couters, true), ['context' => 'as-worker']);
+                    wc_get_logger()->error($th->getMessage() . '... ' . print_r($couters, true), ['source' => 'as_worker']);
                     delete_transient('as-worker');
                     do_action('as_worker_iteration_error', $th);
                     break;
