@@ -70,10 +70,11 @@ add_action('init', function () {
 
                     if (empty($jobsNumber)) {
                         \WP_CLI::log('Jobs - auto stop if empty');
-                        wc_get_logger()->info('Jobs - auto stop', [
-                            'source' => 'as-worker',
-                            'couters' => $couters,
-                        ]);
+                        // wc_get_logger()->info('Jobs - auto stop', [
+                        //     'source' => 'as-worker',
+                        //     'couters' => $couters,
+                        // ]);
+                        do_action('as_worker_iteration_empty', $couters);
                         delete_transient('as-worker');
                         break;
                     } else {
