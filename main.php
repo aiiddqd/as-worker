@@ -15,15 +15,12 @@ Plugin::init();
 
 class Plugin
 {
-
     public static function init()
     {
 
         add_filter('action_scheduler_allow_async_request_runner', '__return_false');
 
         add_action('init', function () {
-
-
             if (class_exists('WP_CLI')) {
                 WP_CLI::add_command('as-worker', [self::class, 'handler']);
             }
@@ -32,8 +29,6 @@ class Plugin
 
     public static function handler($argv, $assoc_args)
     {
-        // Handle the worker logic here
-
         if (isset($argv[0]) && 'stop' === $argv[0]) {
             set_transient('as-worker-hard-stop', true, MINUTE_IN_SECONDS * 30);
             return true;
@@ -49,6 +44,7 @@ class Plugin
             'total' => 0,
             'iterations' => 0
         ];
+        
         while (true) {
 
             if (get_transient('as-worker-hard-stop')) {
